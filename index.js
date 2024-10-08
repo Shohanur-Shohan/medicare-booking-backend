@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 const port = process.env.PORT || 3000;
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import mongoose from "mongoose";
 
 
 //config
@@ -17,14 +18,18 @@ app.use(cors({
     origin: true
 }));
 
-const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.c7c3q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    }
-  });
+
+//connect to database
+const MONGO_URI = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.c7c3q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+const connectDB = async () => {
+  try {
+      await mongoose.connect(MONGO_URI, {});
+      console.log("CONNECTED TO DATABASE SUCCESSFULLY");
+  } catch (error) {
+      console.error('COULD NOT CONNECT TO DATABASE:', error.message);
+  }
+};
 
 
 
@@ -40,6 +45,8 @@ async function run() {
   }
 }
 run()
+
 app.listen(port, () => {
+  connectDB()
 //   console.log(`Example app listening on port ${port}`)
 })
