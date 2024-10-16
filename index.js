@@ -4,8 +4,11 @@ import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 const port = process.env.PORT || 3000;
-import { MongoClient, ServerApiVersion } from 'mongodb';
 import mongoose from "mongoose";
+
+//custom import
+import authRoute from './Routes/auth.js'
+
 
 
 //config
@@ -17,6 +20,7 @@ app.use(cookieParser())
 app.use(cors({
     origin: true
 }));
+app.use('/api/v1/auth', authRoute) //domain/api/v1/auth/register
 
 
 //connect to database
